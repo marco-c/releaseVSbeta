@@ -16,6 +16,81 @@ versions = []
 for key in data['platforms']:
   versions.append(key)
 
+platformData = data['platforms']
+oses = [v for v in platformData['release']['oses']]
+osTotalReleaseUsers = platformData['release']['total']
+osTotalBetaUsers = platformData['beta']['total']
+
+
+def getOSVersionNames(version, os, sort=False):
+  if sort:
+    return [d for d, v in sorted(platformData[version]['oses'][os]['versions'].iteritems(), key=lambda (d, v): v, reverse=True)]
+  else:
+    return [d for d in platformData[version]['oses'][os]['versions']]
+
+
+def getUsersForOses(version, oses=oses):
+  values = []
+  for osName in oses:
+    for k, v in platformData[version]['oses'].iteritems():
+      if k == osName:
+        values.append(v['total'])
+        break
+
+  return np.array(values, dtype=np.float)
+
+
+def buildOsesTab():
+  osesCheckbox = CheckboxGroup(labels=oses, active=[i for i in range(len(oses))])
+
+  source_release = ColumnDataSource(data=dict(x=[], y=[], height=[]))
+  source_beta = ColumnDataSource(data=dict(x=[], y=[], height=[]))
+
+  fig = Figure(title='OS', x_range=[], y_range=[0, 0], plot_width=1000, plot_height=650)
+
+  hover = HoverTool(tooltips=[
+    ('Users', '@height{0.0} %')
+  ])
+
+  fig.add_tools(hover)
+
+  fig.rect(x='x', y='y', height='height', source=source_release,
+           width=0.4, color='orange', legend='Release')
+
+  fig.rect(x='x', y='y', height='height', source=source_beta,
+           width=0.4, color='blue', legend='Beta')
+
+  fig.xaxis.major_label_orientation = np.pi / 3
+
+  def update(selected):
+    cur_oses = [oses[i] for i in range(len(oses)) if i in selected]
+
+    releaseUsers = np.around(100 * getUsersForOses('release', cur_oses) / osTotalReleaseUsers, 1)
+    betaUsers = np.around(100 * getUsersForOses('beta', cur_oses) / osTotalBetaUsers, 1)
+
+    fig.x_range.factors = cur_oses
+    fig.y_range.end = max([releaseUsers.max(), betaUsers.max()])
+
+    source_release.data = dict(
+      x=[c + ':0.3' for c in cur_oses],
+      y=releaseUsers / 2,
+      height=releaseUsers,
+    )
+
+    source_beta.data = dict(
+      x=[c + ':0.7' for c in cur_oses],
+      y=betaUsers / 2,
+      height=betaUsers,
+    )
+
+  osesCheckbox.on_click(update)
+
+  update(osesCheckbox.active)
+
+  osesComparison = HBox(HBox(VBoxForm(*[osesCheckbox]), width=300), fig, width=1100)
+
+  return Panel(child=osesComparison, title="OS Comparison")
+
 '''def getWindowsVersionsChart():
   windowsVersions = []
   for version in versions:
@@ -221,5 +296,5 @@ def buildDevicesTab():
 
   return Panel(child=deviceComparison, title="GFX Device Comparison")
 
-tabs = Tabs(tabs=[buildVendorsTab(), buildDevicesTab()])
+tabs = Tabs(tabs=[buildOsesTab(), buildVendorsTab(), buildDevicesTab()])
 curdoc().add_root(tabs)
