@@ -91,19 +91,6 @@ def buildOsesTab():
 
   return Panel(child=osesComparison, title="OS Comparison")
 
-'''def getWindowsVersionsChart():
-  windowsVersions = []
-  for version in versions:
-    for key in data['platforms']['release']['oses']['Windows']['versions']:
-      windowsVersions.append({
-        'version': version,
-        'os_version': key,
-        'users': data['platforms'][version]['oses']['Windows']['versions'][key],
-      })
-
-  return Bar(pd.DataFrame(windowsVersions), label='os_version', values='users', group='version',
-            title="All", legend='top_right', bar_width=0.4)'''
-
 gfxData = data['graphics']
 
 for i in range(len(versions)):
