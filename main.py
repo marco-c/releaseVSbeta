@@ -4,7 +4,32 @@ from bokeh.models.widgets import Select, Panel, Tabs, CheckboxGroup
 import json
 import numpy as np
 import tarfile
-import os.path
+import time
+import urllib
+import os
+
+# Download the data file if it doesn't exist or if it is one day old.
+if not os.path.exists('agg_data.tar.gz') or os.path.getmtime('agg_data.tar.gz') + 24 * 60 * 60 < time.time():
+  # Use the preexisting file as a backup.
+  try:
+    os.rename('agg_data.tar.gz', 'agg_data.tar.gz.old')
+  except OSError:
+    pass
+
+  try:
+    urllib.URLopener().retrieve('https://analysis-output.telemetry.mozilla.org/beta_release_os_gfx/data/agg_data.tar.gz', 'agg_data.tar.gz')
+  except:
+    # Use the backup copy if there was an error during the download.
+    try:
+      os.rename('agg_data.tar.gz.old', 'agg_data.tar.gz')
+    except OSError:
+      pass
+
+  # Remove the backup copy.
+  try:
+    os.remove('agg_data.tar.gz.old')
+  except OSError:
+    pass
 
 if not os.path.exists('agg_data.json'):
   tarfile.open('agg_data.tar.gz', 'r:gz').extractall('.')
