@@ -34,13 +34,13 @@ for i in range(len(versions)):
         other_version = versions[j]
         if vendor not in gfxData[other_version]['gfxs']:
           gfxData[other_version]['gfxs'][vendor] = dict(
-            total = 0,
-            devices = dict(),
+            total=0,
+            devices=dict(),
           )
         if device not in gfxData[other_version]['gfxs'][vendor]['devices']:
           gfxData[other_version]['gfxs'][vendor]['devices'][device] = dict(
-            total = 0,
-            versions = dict(),
+            total=0,
+            versions=dict(),
           )
 
 
@@ -72,6 +72,7 @@ def getUsersForVendors(version, vendors=gfxVendors):
 
   return np.array(values, dtype=np.float)
 
+
 def getUsersForDevices(version, vendor, devices=None):
   if devices is None:
     devices = getDeviceNames('release', vendor)
@@ -84,6 +85,7 @@ def getUsersForDevices(version, vendor, devices=None):
         break
 
   return np.array(values, dtype=np.float)
+
 
 def buildVendorsTab():
   defaultGfxVendors = [
@@ -130,15 +132,15 @@ def buildVendorsTab():
     fig.y_range.end = max([releaseUsers.max(), betaUsers.max()])
 
     source_release.data = dict(
-      x = [c + ':0.3' for c in vendors],
-      y = releaseUsers / 2,
-      height = releaseUsers,
+      x=[c + ':0.3' for c in vendors],
+      y=releaseUsers / 2,
+      height=releaseUsers,
     )
 
     source_beta.data = dict(
-      x = [c + ':0.7' for c in vendors],
-      y = betaUsers / 2,
-      height = betaUsers,
+      x=[c + ':0.7' for c in vendors],
+      y=betaUsers / 2,
+      height=betaUsers,
     )
 
   gfxVendorCheckbox.on_click(update)
@@ -148,6 +150,7 @@ def buildVendorsTab():
   vendorComparison = HBox(HBox(VBoxForm(*[gfxVendorCheckbox]), width=300), fig, width=1100)
 
   return Panel(child=vendorComparison, title="GFX Vendor Comparison")
+
 
 def buildDevicesTab():
   gfxVendorSelect = Select(title='Vendor', options=gfxVendors, value=gfxVendors[0])
@@ -194,15 +197,15 @@ def buildDevicesTab():
     fig.y_range.end = max([releaseUsers.max(), betaUsers.max()])
 
     source_release.data = dict(
-      x = [c + ':0.3' for c in devices],
-      y = releaseUsers / 2,
-      height = releaseUsers,
+      x=[c + ':0.3' for c in devices],
+      y=releaseUsers / 2,
+      height=releaseUsers,
     )
 
     source_beta.data = dict(
-      x = [c + ':0.7' for c in devices],
-      y = betaUsers / 2,
-      height = betaUsers,
+      x=[c + ':0.7' for c in devices],
+      y=betaUsers / 2,
+      height=betaUsers,
     )
 
   def update(attrname, old, new):
@@ -223,4 +226,3 @@ def buildDevicesTab():
 
 tabs = Tabs(tabs=[buildVendorsTab(), buildDevicesTab()])
 curdoc().add_root(tabs)
-
