@@ -110,15 +110,11 @@ def buildVendorsTab():
 
   fig.add_tools(hover)
 
-  fig.rect(x="x", y="y", source=source_release,
-           width=0.4,
-           height='height',
-           color='orange')
+  fig.rect(x='x', y='y', height='height', source=source_release,
+           width=0.4, color='orange', legend='Release')
 
-  fig.rect(x="x", y="y", source=source_beta,
-           width=0.4,
-           height='height',
-           color='blue')
+  fig.rect(x='x', y='y', height='height', source=source_beta,
+           width=0.4, color='blue', legend='Beta')
 
   fig.xaxis.major_label_orientation = np.pi / 3
 
@@ -170,15 +166,11 @@ def buildDevicesTab():
 
   fig.add_tools(hover)
 
-  fig.rect(x="x", y="y", source=source_release,
-           width=0.4,
-           height='height',
-           color="orange")
+  fig.rect(x='x', y='y', height='height', source=source_release,
+           width=0.4, color='orange', legend='Release')
 
-  fig.rect(x="x", y="y", source=source_beta,
-           width=0.4,
-           height='height',
-           color="blue")
+  fig.rect(x='x', y='y', height='height', source=source_beta,
+           width=0.4, color='blue', legend='Beta')
 
   fig.xaxis.major_label_orientation = np.pi / 3
 
