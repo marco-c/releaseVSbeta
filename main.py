@@ -3,6 +3,11 @@ from bokeh.models import ColumnDataSource, HoverTool, HBox, VBoxForm
 from bokeh.models.widgets import Select, Panel, Tabs, CheckboxGroup
 import json
 import numpy as np
+import tarfile
+import os.path
+
+if not os.path.exists('agg_data.json'):
+  tarfile.open('agg_data.tar.gz', 'r:gz').extractall('.')
 
 with open('agg_data.json') as data_file:
   data = json.load(data_file)
