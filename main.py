@@ -88,7 +88,7 @@ def buildOSesTab():
   fig = Figure(title='OS', x_range=[], y_range=[0, 0], plot_width=1000, plot_height=650)
 
   hover = HoverTool(tooltips=[
-    ('Users', '@height{0.0} %')
+    ('Users', '@height %')
   ])
 
   fig.add_tools(hover)
@@ -104,8 +104,8 @@ def buildOSesTab():
   def update(selected):
     cur_oses = [oses[i] for i in range(len(oses)) if i in selected]
 
-    releaseUsers = np.around(100 * getUsersForOses('release', cur_oses) / osTotalReleaseUsers, 1)
-    betaUsers = np.around(100 * getUsersForOses('beta', cur_oses) / osTotalBetaUsers, 1)
+    releaseUsers = 100 * getUsersForOses('release', cur_oses) / osTotalReleaseUsers
+    betaUsers = 100 * getUsersForOses('beta', cur_oses) / osTotalBetaUsers
 
     fig.x_range.factors = cur_oses
     fig.y_range.end = max([releaseUsers.max(), betaUsers.max()])
@@ -141,7 +141,7 @@ def buildOSVersionsTab():
   fig = Figure(title='OS Versions', x_range=[], y_range=[0, 0], plot_width=1000, plot_height=650)
 
   hover = HoverTool(tooltips=[
-    ('Users', '@height{0.0} %')
+    ('Users', '@height %')
   ])
 
   fig.add_tools(hover)
@@ -162,8 +162,8 @@ def buildOSVersionsTab():
 
     versions = [versionNames[i] for i in range(len(versionNames)) if i in versionCheckbox.active]
 
-    releaseUsers = np.around(100 * getUsersForVersions('release', os, versions) / osTotalReleaseUsers, 1)
-    betaUsers = np.around(100 * getUsersForVersions('beta', os, versions) / osTotalBetaUsers, 1)
+    releaseUsers = 100 * getUsersForVersions('release', os, versions) / osTotalReleaseUsers
+    betaUsers = 100 * getUsersForVersions('beta', os, versions) / osTotalBetaUsers
 
     fig.x_range.factors = versions
     fig.y_range.end = max([releaseUsers.max(), betaUsers.max()])
@@ -277,7 +277,7 @@ def buildVendorsTab():
                plot_width=1000, plot_height=650)
 
   hover = HoverTool(tooltips=[
-    ('Users', '@height{0.0} %')
+    ('Users', '@height %')
   ])
 
   fig.add_tools(hover)
@@ -293,8 +293,8 @@ def buildVendorsTab():
   def update(selected):
     vendors = [gfxVendors[i] for i in range(len(gfxVendors)) if i in selected]
 
-    releaseUsers = np.around(100 * getUsersForVendors('release', vendors) / gfxTotalReleaseUsers, 1)
-    betaUsers = np.around(100 * getUsersForVendors('beta', vendors) / gfxTotalBetaUsers, 1)
+    releaseUsers = 100 * getUsersForVendors('release', vendors) / gfxTotalReleaseUsers
+    betaUsers = 100 * getUsersForVendors('beta', vendors) / gfxTotalBetaUsers
 
     fig.x_range.factors = vendors
     fig.y_range.end = max([releaseUsers.max(), betaUsers.max()])
@@ -333,7 +333,7 @@ def buildDevicesTab():
                plot_width=1000, plot_height=650)
 
   hover = HoverTool(tooltips=[
-    ('Users', '@height{0.0} %')
+    ('Users', '@height %')
   ])
 
   fig.add_tools(hover)
@@ -354,8 +354,8 @@ def buildDevicesTab():
 
     devices = [deviceNames[i] for i in range(len(deviceNames)) if i in gfxDeviceCheckbox.active]
 
-    releaseUsers = np.around(100 * getUsersForDevices('release', vendor, devices) / gfxTotalReleaseUsers, 1)
-    betaUsers = np.around(100 * getUsersForDevices('beta', vendor, devices) / gfxTotalBetaUsers, 1)
+    releaseUsers = 100 * getUsersForDevices('release', vendor, devices) / gfxTotalReleaseUsers
+    betaUsers = 100 * getUsersForDevices('beta', vendor, devices) / gfxTotalBetaUsers
 
     fig.x_range.factors = devices
     fig.y_range.end = max([releaseUsers.max(), betaUsers.max()])
